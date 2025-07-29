@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -64,9 +65,10 @@ const SignUpForm = () => {
         onSuccess: () => {
           form.reset();
           router.push("/dashboard");
+          toast.success("Login realizado com sucesso");
         },
         onError: (error) => {
-          console.log(error);
+          toast.error(`Erro ao criar conta: ${error.error.message}`);
         },
       },
     );
