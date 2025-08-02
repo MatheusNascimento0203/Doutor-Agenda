@@ -13,7 +13,7 @@ import { db } from "@/db";
 import { usersToClinicsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
-import ClinicForm from "./components/form";
+import ClinicForm from "./_components/form";
 
 const ClinicFormPage = async () => {
   const session = await auth.api.getSession({

@@ -58,7 +58,6 @@ const LoginForm = () => {
         onSuccess: () => {
           form.reset();
           router.push("/dashboard");
-          toast.success("Login realizado com sucesso");
         },
         onError: () => {
           toast.error("E-mail ou senha inválidos");
@@ -121,7 +120,7 @@ const LoginForm = () => {
             <div className="w-full space-y-2">
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full cursor-pointer"
                 disabled={form.formState.isSubmitting}
               >
                 {form.formState.isSubmitting ? (
@@ -132,7 +131,7 @@ const LoginForm = () => {
               </Button>
               <Button
                 variant="outline"
-                className="w-full"
+                className="w-full cursor-pointer"
                 type="button"
                 onClick={handleGoogleLogin}
               >
