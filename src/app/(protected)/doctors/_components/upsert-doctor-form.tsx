@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
@@ -94,12 +95,17 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: upsertDoctorFormProps) => {
     },
   });
 
+  const toastShown = useRef(false);
+
   const upsertDoctorAction = useAction(upsertDoctor, {
     onSuccess: () => {
-      if (doctor) {
-        toast.success("Médico editado com sucesso.");
-      } else {
-        toast.success("Médico adicionado com sucesso.");
+      if (!toastShown.current) {
+        toastShown.current = true;
+        toast.success(
+          doctor
+            ? "Médico editado com sucesso."
+            : "Médico adicionado com sucesso.",
+        );
       }
       form.reset();
       onSuccess?.();
@@ -110,6 +116,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: upsertDoctorFormProps) => {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    toastShown.current = false;
     upsertDoctorAction.execute({
       ...data,
       id: doctor?.id,
@@ -394,7 +401,11 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: upsertDoctorFormProps) => {
             )}
           />
           <DialogFooter>
-            <Button type="submit" disabled={upsertDoctorAction.isPending}>
+            <Button
+              type="submit"
+              className="cursor-pointer"
+              disabled={upsertDoctorAction.isPending}
+            >
               {upsertDoctorAction.isPending
                 ? "Salvando..."
                 : doctor

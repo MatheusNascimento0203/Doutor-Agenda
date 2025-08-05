@@ -33,6 +33,7 @@ const DoctorPage = async () => {
 
   const doctors = await db.query.doctorsTable.findMany({
     where: eq(doctorsTable.clinicId, session.user.clinic.id),
+    orderBy: (doctorsTable, { asc }) => asc(doctorsTable.name),
   });
 
   return (
