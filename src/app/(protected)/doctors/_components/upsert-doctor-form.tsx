@@ -32,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { doctorsTable } from "@/db/schema";
 
 import { medicalSpecialties } from "../_constants/_medical-specialty";
 
@@ -72,26 +73,33 @@ const formSchema = z
   );
 
 interface upsertDoctorFormProps {
+  doctor: typeof doctorsTable.$inferInsert;
   onSuccess?: () => void;
 }
 
-const UpsertDoctorForm = ({ onSuccess }: upsertDoctorFormProps) => {
+const UpsertDoctorForm = ({ doctor, onSuccess }: upsertDoctorFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      specialty: "",
-      appoitmentPriceIncents: 0,
-      availableFromWeekDay: "1",
-      availableToWeekDay: "5",
-      availableFromTime: "",
-      availableToTime: "",
+      name: doctor?.name ?? "",
+      specialty: doctor?.specialty ?? "",
+      appoitmentPriceIncents: doctor?.appoitmentPriceIncents
+        ? doctor.appoitmentPriceIncents / 100
+        : 0,
+      availableFromWeekDay: doctor?.availableFromWeekDay?.toString() ?? "1",
+      availableToWeekDay: doctor?.availableToWeekDay?.toString() ?? "5",
+      availableFromTime: doctor?.availableFromTime ?? "",
+      availableToTime: doctor?.availableToTime ?? "",
     },
   });
 
   const upsertDoctorAction = useAction(upsertDoctor, {
     onSuccess: () => {
-      toast.success("Médico adicionado com sucesso.");
+      if (doctor) {
+        toast.success("Médico editado com sucesso.");
+      } else {
+        toast.success("Médico adicionado com sucesso.");
+      }
       form.reset();
       onSuccess?.();
     },
@@ -103,6 +111,7 @@ const UpsertDoctorForm = ({ onSuccess }: upsertDoctorFormProps) => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     upsertDoctorAction.execute({
       ...data,
+      id: doctor?.id,
       availableFromWeekDay: parseInt(data.availableFromWeekDay),
       availableToWeekDay: parseInt(data.availableToWeekDay),
       appoitmentPriceIncents: data.appoitmentPriceIncents * 100,
@@ -112,8 +121,12 @@ const UpsertDoctorForm = ({ onSuccess }: upsertDoctorFormProps) => {
   return (
     <DialogContent>
       <DialogHeader>
-        <DialogTitle>Adicionar Medico</DialogTitle>
-        <DialogDescription>Adicione um novo médico.</DialogDescription>
+        <DialogTitle>{doctor ? doctor.name : "Adicionar Médico"}</DialogTitle>
+        <DialogDescription>
+          {doctor
+            ? "Edite as informações desse médico."
+            : "Adicione um novo médico."}
+        </DialogDescription>
       </DialogHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -381,7 +394,11 @@ const UpsertDoctorForm = ({ onSuccess }: upsertDoctorFormProps) => {
           />
           <DialogFooter>
             <Button type="submit" disabled={upsertDoctorAction.isPending}>
-              {upsertDoctorAction.isExecuting ? "Adicionando..." : "Adicionar"}
+              {upsertDoctorAction.isPending
+                ? "Salvando..."
+                : doctor
+                  ? "Salvar"
+                  : "Adicionar"}
             </Button>
           </DialogFooter>
         </form>

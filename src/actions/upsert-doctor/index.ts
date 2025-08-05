@@ -47,8 +47,8 @@ export const upsertDoctor = actionClient
     await db
       .insert(doctorsTable)
       .values({
-        id: parsedInput.id,
         ...parsedInput,
+        id: parsedInput.id,
         clinicId: session?.user?.clinic?.id,
         availableFromTime: availableFromTimeUTC.format("HH:mm:ss"),
         availableToTime: availableToTimeUTC.format("HH:mm:ss"),
