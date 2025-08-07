@@ -75,11 +75,11 @@ const formSchema = z
   );
 
 interface upsertDoctorFormProps {
-  doctor: typeof doctorsTable.$inferInsert;
+  doctor?: typeof doctorsTable.$inferInsert;
   onSuccess?: () => void;
 }
 
-const UpsertDoctorForm = ({ doctor, onSuccess }: upsertDoctorFormProps) => {
+const UpsertDoctorForm = ({ doctor , onSuccess }: upsertDoctorFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     shouldUnregister: true,
     resolver: zodResolver(formSchema),
