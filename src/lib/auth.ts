@@ -10,21 +10,12 @@ import { usersToClinicsTable } from "@/db/schema";
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
-    usePlural: true,
     schema,
   }),
-  user: {
-    modelName: "usersTable",
-  },
-  session: {
-    modelName: "sessionsTable",
-  },
-  account: {
-    modelName: "accountsTable",
-  },
-  verification: {
-    modelName: "verificationsTable",
-  },
+  user: { modelName: "usersTable" },
+  session: { modelName: "sessionsTable" },
+  account: { modelName: "accountsTable" },
+  verification: { modelName: "verificationsTable" },
   emailAndPassword: {
     enabled: true,
   },

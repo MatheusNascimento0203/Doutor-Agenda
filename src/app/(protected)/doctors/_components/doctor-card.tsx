@@ -52,7 +52,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
 
   const deleteDoctorAction = useAction(deleteDoctor, {
     onSuccess: () => {
-      toast.success("Médico deletado com sucesso.");
+      toast.success("Médico deletado com sucesso..");
     },
     onError: () => {
       toast.error("Erro ao deletar médico.");
