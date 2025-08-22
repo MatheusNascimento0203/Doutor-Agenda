@@ -1,0 +1,41 @@
+"use client";
+
+import { Plus } from "lucide-react";
+import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { doctorsTable, patientsTable } from "@/db/schema";
+
+import AddAppointmentForm from "./add-appointment-fom";
+
+interface AddAppointmentButtonProps {
+  patients: (typeof patientsTable.$inferSelect)[];
+  doctors: (typeof doctorsTable.$inferSelect)[];
+}
+
+const AddAppointmentButton = ({
+  patients,
+  doctors,
+}: AddAppointmentButtonProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button className="cursor-pointer">
+          <Plus className="mr-2 h-4 w-4" />
+          Agendar Consulta
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <AddAppointmentForm
+          patients={patients}
+          doctors={doctors}
+          isOpen={isOpen}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default AddAppointmentButton;
