@@ -1,7 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
-  date,
   integer,
   pgEnum,
   pgTable,
@@ -178,7 +177,8 @@ export const appointmentsTable = pgTable("appointments", {
   clinicId: uuid("clinic_id")
     .notNull()
     .references(() => clinicsTable.id, { onDelete: "cascade" }),
-  date: date("date").notNull(),
+  date: timestamp("date").notNull(),
+  appointmentPriceInCents: integer("appointment_price_in_cents").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()

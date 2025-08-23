@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { doctorsTable, patientsTable } from "@/db/schema";
 
 import AddAppointmentForm from "./add-appointment-fom";
@@ -27,13 +27,12 @@ const AddAppointmentButton = ({
           Agendar Consulta
         </Button>
       </DialogTrigger>
-      <DialogContent>
-        <AddAppointmentForm
-          patients={patients}
-          doctors={doctors}
-          isOpen={isOpen}
-        />
-      </DialogContent>
+      <AddAppointmentForm
+        isOpen={isOpen}
+        patients={patients}
+        doctors={doctors}
+        onSuccess={() => setIsOpen(false)}
+      />
     </Dialog>
   );
 };
